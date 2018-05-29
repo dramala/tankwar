@@ -109,8 +109,8 @@ public class Tank {
            double xChange = Math.cos(Math.toRadians(angle)) * direction;
            double yChange = Math.sin(Math.toRadians(angle)) * direction;
            this.angle = angle;
-           xCoord += xChange * 0.8f;
-           yCoord += yChange * 0.8f;
+           xCoord += xChange * 2.8f;
+           yCoord += yChange * 2.8f;
 
        }
 
