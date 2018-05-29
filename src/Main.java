@@ -159,7 +159,6 @@ public class Main extends BasicGame {
         map.render(0,0);
         g.draw(rect);
 
-
         blueTank.draw(player.getxCoord(), player.getyCoord(), 1);
 
 
