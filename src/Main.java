@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -5,6 +6,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
+import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
@@ -15,7 +17,7 @@ import org.newdawn.slick.tiled.TiledMap;
 public class Main extends BasicGame {
 
 
-    Tank player = new Tank(64, 64, 1, 10, true);
+    Tank player = new Tank(70, 64, 1, 10, true);
     Tank player2 = new Tank(650, 700, 2, 10, true);
     Image blueTank;
     Image redTank;
@@ -30,10 +32,12 @@ public class Main extends BasicGame {
     @Override
     public void init(GameContainer gc) throws SlickException {
 
+        float[] vertices  = new float[]{69,64,94,64,121,64,121,86,121,109,94,109,69,109,69,86,69,64};
         map = new TiledMap("/Map2/map2.tmx");
         blueTank = new Image("/images/tank1.png");
         redTank = new Image("/images/tank2.png");
-        rect = new Rectangle(68,64,82,60);
+        //rect for reference!
+        rect = new Rectangle(70,64,39,29);
 
     }
 
@@ -44,7 +48,7 @@ public class Main extends BasicGame {
       
         if (input.isKeyDown(Input.KEY_LEFT)) {
             float turn = -2f;
-            if (nextTurnValid(turn)){
+            if (nextTurnValid(turn,rect)){
                 blueTank.rotate(turn);
                 player.setAngle(turn);
                 rect = rect.transform(Transform.createRotateTransform((float) Math.toRadians((turn)), rect.getCenterX(), rect.getCenterY()));
@@ -54,10 +58,11 @@ public class Main extends BasicGame {
 
         if (input.isKeyDown(Input.KEY_RIGHT)) {
             float turn = 2f;
-            if (nextTurnValid(turn)) {
+            if (nextTurnValid(turn,rect)) {
                 blueTank.rotate(turn);
                 player.setAngle(turn);
-                rect = rect.transform(Transform.createRotateTransform((float) Math.toRadians((turn)), rect.getCenterX(), rect.getCenterY()));
+                rect = rect.transform(Transform.createRotateTransform((float) Math.toRadians((turn)),rect.getCenterX(),rect.getCenterY()));
+
             }
             turn = 0;
         }
@@ -66,7 +71,7 @@ public class Main extends BasicGame {
 
                 double xChange = Math.cos(Math.toRadians(blueTank.getRotation())) * -1 * 2.8f;
                 double yChange = Math.sin(Math.toRadians(blueTank.getRotation())) * -1 * 2.8f;
-                if(nextMoveValid(1,xChange,yChange)) {
+                if(nextMoveValid(1,xChange,yChange,rect)) {
                     rect.setCenterX(rect.getCenterX() + (float) xChange);
                     rect.setCenterY(rect.getCenterY() + (float) yChange);
                     player.move(-1, blueTank.getRotation());
@@ -78,7 +83,7 @@ public class Main extends BasicGame {
         if(input.isKeyDown(Input.KEY_DOWN)) {
             double xChange = Math.cos(Math.toRadians(blueTank.getRotation())) * 1 * 2.8f;
             double yChange = Math.sin(Math.toRadians(blueTank.getRotation())) * 1 * 2.8f;
-            if (nextMoveValid(1,xChange,yChange)) {
+            if (nextMoveValid(1,xChange,yChange,rect)) {
                 rect.setCenterX(rect.getCenterX() + (float) xChange);
                 rect.setCenterY(rect.getCenterY() + (float) yChange);
                 player.move(1, blueTank.getRotation());
@@ -87,7 +92,12 @@ public class Main extends BasicGame {
 
     }
 
-    private boolean nextTurnValid(float turn){
+    /*
+     * Checks too see if the next turn is valid.
+     * Turn: The angle which the tank is going to rotate.
+     * Return: TRUE if next turn is valid. FALSE if next turn is invalid.
+     */
+    private boolean nextTurnValid(float turn, Shape rect){
 
         int x1 = (int) Math.floor(rect.transform(Transform.createRotateTransform((float) Math.toRadians((turn)), rect.getCenterX(), rect.getCenterY())).getPoints()[0]/32);
         int y1 = (int) Math.floor(rect.transform(Transform.createRotateTransform((float) Math.toRadians((turn)), rect.getCenterX(), rect.getCenterY())).getPoints()[1]/32);
@@ -127,7 +137,7 @@ public class Main extends BasicGame {
      * yChange: the change in y coordinates
      * Return: TRUE if next move is valid. FALSE if next move is invalid.
      */
-    private boolean nextMoveValid(int collision, double xChange, double yChange){
+    private boolean nextMoveValid(int collision, double xChange, double yChange, Shape rect){
 
 
         if (map.getTileId((int)Math.floor((rect.getPoints()[0]+xChange)/32),(int) Math.floor((rect.getPoints()[1]+yChange)/32),collision) != 0){
@@ -148,20 +158,14 @@ public class Main extends BasicGame {
 
 
         return true;
-
     }
 
 
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException
     {
-
         map.render(0,0);
-        g.draw(rect);
-
         blueTank.draw(player.getxCoord(), player.getyCoord(), 1);
-
-
     }
 
 
