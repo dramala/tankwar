@@ -22,7 +22,8 @@ public class Main extends BasicGame {
     Image blueTank;
     Image redTank;
     private TiledMap map;
-    Shape rect;
+    Shape blueRect;
+    Shape redRect;
 
 
     public Main(String gamename) {
@@ -34,10 +35,11 @@ public class Main extends BasicGame {
 
         float[] vertices  = new float[]{69,64,94,64,121,64,121,86,121,109,94,109,69,109,69,86,69,64};
         map = new TiledMap("/Map2/map2.tmx");
-        blueTank = new Image("/images/tank1.png");
-        redTank = new Image("/images/tank2.png");
+        blueTank = new Image("/images/blue.png");
+        redTank = new Image("/images/red.png");
         //rect for reference!
-        rect = new Rectangle(70,64,39,29);
+         blueRect = new Rectangle(70,64,36,28);
+         redRect = new Rectangle(650,700,36,28);
 
     }
 
@@ -48,20 +50,20 @@ public class Main extends BasicGame {
       
         if (input.isKeyDown(Input.KEY_LEFT)) {
             float turn = -2f;
-            if (nextTurnValid(turn,rect)){
+            if (nextTurnValid(turn,blueRect)){
                 blueTank.rotate(turn);
                 player.setAngle(turn);
-                rect = rect.transform(Transform.createRotateTransform((float) Math.toRadians((turn)), rect.getCenterX(), rect.getCenterY()));
+                blueRect = blueRect.transform(Transform.createRotateTransform((float) Math.toRadians((turn)), blueRect.getCenterX(), blueRect.getCenterY()));
             }
             turn = 0;
         }
 
         if (input.isKeyDown(Input.KEY_RIGHT)) {
             float turn = 2f;
-            if (nextTurnValid(turn,rect)) {
+            if (nextTurnValid(turn,blueRect)) {
                 blueTank.rotate(turn);
                 player.setAngle(turn);
-                rect = rect.transform(Transform.createRotateTransform((float) Math.toRadians((turn)),rect.getCenterX(),rect.getCenterY()));
+                blueRect = blueRect.transform(Transform.createRotateTransform((float) Math.toRadians((turn)),blueRect.getCenterX(),blueRect.getCenterY()));
 
             }
             turn = 0;
@@ -71,9 +73,9 @@ public class Main extends BasicGame {
 
                 double xChange = Math.cos(Math.toRadians(blueTank.getRotation())) * -1 * 2.8f;
                 double yChange = Math.sin(Math.toRadians(blueTank.getRotation())) * -1 * 2.8f;
-                if(nextMoveValid(1,xChange,yChange,rect)) {
-                    rect.setCenterX(rect.getCenterX() + (float) xChange);
-                    rect.setCenterY(rect.getCenterY() + (float) yChange);
+                if(nextMoveValid(1,xChange,yChange,blueRect)) {
+                    blueRect.setCenterX(blueRect.getCenterX() + (float) xChange);
+                    blueRect.setCenterY(blueRect.getCenterY() + (float) yChange);
                     player.move(-1, blueTank.getRotation());
 
                 }
@@ -83,9 +85,9 @@ public class Main extends BasicGame {
         if(input.isKeyDown(Input.KEY_DOWN)) {
             double xChange = Math.cos(Math.toRadians(blueTank.getRotation())) * 1 * 2.8f;
             double yChange = Math.sin(Math.toRadians(blueTank.getRotation())) * 1 * 2.8f;
-            if (nextMoveValid(1,xChange,yChange,rect)) {
-                rect.setCenterX(rect.getCenterX() + (float) xChange);
-                rect.setCenterY(rect.getCenterY() + (float) yChange);
+            if (nextMoveValid(1,xChange,yChange,blueRect)) {
+                blueRect.setCenterX(blueRect.getCenterX() + (float) xChange);
+                blueRect.setCenterY(blueRect.getCenterY() + (float) yChange);
                 player.move(1, blueTank.getRotation());
             }
         }
@@ -166,6 +168,7 @@ public class Main extends BasicGame {
     {
         map.render(0,0);
         blueTank.draw(player.getxCoord(), player.getyCoord(), 1);
+        redTank.draw(player2.getxCoord(),player2.getyCoord(),1);
     }
 
 
