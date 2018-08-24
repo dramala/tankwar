@@ -3,71 +3,41 @@ import org.newdawn.slick.geom.Circle;
 
 public class cannonBall extends Circle {
 
+    private double rotation;
+    private boolean visible;
 
-    private float xCoord;
-    private float yCoord;
-    private boolean move;
-    private double angle;
-private boolean visible;
-
-    public cannonBall(float centerPointX, float centerPointY, float radius) {
+    public cannonBall(float centerPointX, float centerPointY, float radius, double rotation) {
         super(centerPointX, centerPointY, radius);
-        xCoord=centerPointX;
-        yCoord=centerPointY;
+        this.rotation = rotation;
+        this.visible = true;
     }
 
+    public void move() {
+        double xChange = Math.cos(Math.toRadians(rotation));
+        double yChange = Math.sin(Math.toRadians(rotation));
 
-    public void move(double angle) {
-
-        double xChange = Math.cos(Math.toRadians(angle));
-        double yChange = Math.sin(Math.toRadians(angle));
-
-        xCoord -= xChange * 4.1f;
-        yCoord -= yChange * 4.1f;
-
-
-    }
-    public boolean getMove(){
-        return move;
+        this.setCenterX(getCenterX() - (float) xChange * 3.5f);
+        this.setCenterY(getCenterY() - (float) yChange * 3.5f);
     }
 
-    public void setMove(boolean change){
-        move=change;
-
+    public boolean getVisible(){
+        return this.visible;
     }
 
-    public void setAngle(double angle) {
-        this.angle = angle;
+    public void outOfBounds(){
+        this.visible = false;
     }
 
-    public double getAngle() {
-        return angle;
+    public void bounceVertical(){
+
+        this.rotation = 360 - rotation;
     }
 
-    public float getxCoord(){
-        return xCoord;
-    }
-    public float getyCoord(){
-        return yCoord;
+    public void bounceHorisontal(){
+        this.rotation = 180 - rotation;
     }
 
-    public void setxCoord(float xCoord1) {
-        xCoord=xCoord1;
-    }
-    public void setyCoord(float yCoord1) {
-        yCoord=yCoord1;
-    }
-
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public boolean isMove() {
-        return move;
+    public double getRotation(){
+        return rotation;
     }
 }
