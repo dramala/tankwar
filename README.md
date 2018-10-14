@@ -1,6 +1,7 @@
 # Tankwar
 
-How to install!
+How to install:
+
 Clone the repo
 
 Import the folder that was cloned into preferred IDE
