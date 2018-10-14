@@ -1,4 +1,4 @@
-# tankwar
+# Tankwar
 
 How to install!
 Clone the repo
